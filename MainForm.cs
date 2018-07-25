@@ -121,7 +121,7 @@ namespace BatchWatermark
             if (checkBox1.Checked)
             {
                 // Open Image WaterMark
-                About form = new About();
+                ImageWatermark form = new ImageWatermark(fileNames);
                 this.Hide();
                 form.FormClosed += new FormClosedEventHandler(mainForm_close);
                 form.Show();
@@ -129,7 +129,7 @@ namespace BatchWatermark
             else
             {
                 // Open Text Watermark
-                About form = new About();
+                TextWatermark form = new TextWatermark(fileNames);
                 this.Hide();
                 form.FormClosed += new FormClosedEventHandler(mainForm_close);
                 form.Show();
