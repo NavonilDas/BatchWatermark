@@ -10,16 +10,11 @@ using System.Windows.Forms;
 
 namespace BatchWatermark
 {
-    public partial class MainForm : Form
+    public partial class SettingsForm : Form
     {
-        public MainForm()
+        public SettingsForm()
         {
             InitializeComponent();
-        }
-
-        public void Convert(List<string> files)
-        {
-
         }
     }
 }
