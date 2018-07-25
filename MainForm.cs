@@ -126,13 +126,17 @@ namespace BatchWatermark
                 form.FormClosed += new FormClosedEventHandler(mainForm_close);
                 form.Show();
             }
-            else
+            else if(checkBox2.Checked)
             {
                 // Open Text Watermark
                 TextWatermark form = new TextWatermark(fileNames);
                 this.Hide();
                 form.FormClosed += new FormClosedEventHandler(mainForm_close);
                 form.Show();
+            }
+            else
+            {
+                MessageBox.Show("Please Select a Checkbox!!!!!");
             }
         }
 
