@@ -18,9 +18,23 @@ namespace BatchWatermark
             InitializeComponent();
             fileNames = filenames;
         }
+        public TextWatermark()
+        {
+            InitializeComponent();
+        }
         void SaveImage(string iFile,string oFile)
         {
 
+        }
+
+        private void TextWatermark_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void panel1_Paint(object sender, PaintEventArgs e)
+        {
+            e.Graphics.DrawLine(Pens.DarkSlateGray, new Point(1, 0), new Point(1,panel1.Height));
         }
     }
 }
