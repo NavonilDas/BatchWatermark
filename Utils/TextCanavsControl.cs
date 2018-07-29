@@ -19,17 +19,19 @@ namespace BatchWatermark.Utils
 
     class TextCanavsControl:Control
     {
+        // Private members
         private string text = "Batch Watermark";
         private Color fontColor = Color.Black;
         private Color backColor = Color.Transparent;
-        private bool isBackTransparent = true;
         private int rotate = 0;
         private Font textFont = new Font("Arial", 16, GraphicsUnit.Point);
         private bool _mouseDown;
         private int _mouseX, _mouseY;
         private int curW;
         private int curH;
+        private bool isCenter = false;
         private Rectangle trans;
+        //        private bool isBackTransparent = true;
 
 
         /// <summary>
@@ -38,7 +40,7 @@ namespace BatchWatermark.Utils
         public event EventHandler OnTextFocused;
 
         /// <summary>
-        /// Sets The Watermark Text
+        /// The Text on the Watermark
         /// </summary>
         public override string Text
         {
@@ -54,6 +56,57 @@ namespace BatchWatermark.Utils
             }
         }
         /// <summary>
+        /// The font on the Watermark
+        /// </summary>
+        public override Font Font
+        {
+            get
+            {
+                return textFont;
+            }
+
+            set
+            {
+                textFont = value;
+                CalcSize();
+                Refresh();
+            }
+        }
+        /// <summary>
+        /// Sets The Back color of the WaterMark
+        /// </summary>
+        public override Color BackColor
+        {
+            get
+            {
+                return backColor;
+            }
+
+            set
+            {
+                backColor = value;
+                Refresh();
+            }
+        }
+        /// <summary>
+        /// Set the Watermark at the Center
+        /// </summary>
+        public bool Centered
+        {
+            get
+            {
+                return isCenter;
+            }
+            set
+            {
+                isCenter = value;
+                setCenter();
+                Refresh();
+            }
+        }
+
+
+        /// <summary>
         /// Constructor
         /// </summary>
         public TextCanavsControl()
@@ -61,6 +114,30 @@ namespace BatchWatermark.Utils
             trans = new Rectangle(10,10, 1, 1);
             CalcSize();
             SetStyle(ControlStyles.UserPaint | ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint, true);
+        }
+        /// <summary>
+        /// Set the Watermark text at the Center
+        /// </summary>
+        private void setCenter()
+        {
+            CalcSize();
+            trans.X = (this.Width - curW) / 2;
+            trans.Y = (this.Height - curH) / 2;
+        }
+        /// <summary>
+        /// Function to set the Background Image from file
+        /// </summary>
+        public void SetImage(string file,Panel parent)
+        {
+            this.Width = parent.Width;
+            this.Location = new Point(0,0);
+            this.BackgroundImage = Image.FromFile(file);
+            Refresh();
+        }
+        public void UpdateImage(Panel parent)
+        {
+            this.Width = parent.Width;
+            Refresh();
         }
         /// <summary>
         /// This Functions Calculates The Text Size Depending on the Font
@@ -84,6 +161,7 @@ namespace BatchWatermark.Utils
         protected override void OnMouseDown(MouseEventArgs e)
         {
             _mouseDown = false;
+
             if (inRectange(e.X, e.Y))
             {
                 _mouseX = e.X - trans.X;
@@ -91,11 +169,10 @@ namespace BatchWatermark.Utils
                 _mouseDown = true;
             }
         }
-        StringBuilder tmp = new StringBuilder();
 
         protected override void OnMouseMove(MouseEventArgs e)
         {
-            if (_mouseDown)
+            if (!isCenter && _mouseDown)
             {
                 trans.X = e.X - _mouseX;
                 trans.Y = e.Y - _mouseY;
@@ -114,18 +191,24 @@ namespace BatchWatermark.Utils
         protected override void OnPaint(PaintEventArgs e)
         {
             Graphics g = e.Graphics;
+            trans.Width = curW;
+            trans.Height = curH;
+
             if (this.BackgroundImage != null)
             {
-                trans.Width = curW;
-                trans.Height = curH;
                 g.DrawImage(this.BackgroundImage,trans, trans.X, trans.Y, curW, curH, GraphicsUnit.Pixel);
             }
+
             if (rotate > 0) {
                 g.TranslateTransform(this.Width / 2, this.Height / 2);
                 g.RotateTransform(rotate);
             }
+
             if(_mouseDown)
-            g.DrawRectangle(Pens.Black, trans);
+                g.DrawRectangle(Pens.Black, trans);
+
+            if (backColor != Color.Transparent)
+                g.FillRectangle(new SolidBrush(backColor), trans);
 
             g.DrawString(this.text, this.textFont, Brushes.Violet, new Point(trans.X + 1 ,trans.Y + 1));
 
@@ -134,6 +217,7 @@ namespace BatchWatermark.Utils
                 g.RotateTransform(-rotate);
                 g.TranslateTransform(-this.Width / 2, -this.Height / 2);
             }
+
         }
     }
 }

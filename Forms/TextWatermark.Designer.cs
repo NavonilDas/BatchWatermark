@@ -29,11 +29,11 @@
         private void InitializeComponent()
         {
             this.panel1 = new System.Windows.Forms.Panel();
+            this.button1 = new System.Windows.Forms.Button();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.canvas = new System.Windows.Forms.Panel();
             this.listView1 = new System.Windows.Forms.ListView();
-            this.button1 = new System.Windows.Forms.Button();
+            this.canvas = new System.Windows.Forms.Panel();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.SuspendLayout();
@@ -49,6 +49,16 @@
             this.panel1.TabIndex = 0;
             this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(71, 66);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 1;
+            this.button1.Text = "button1";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // checkBox1
             // 
             this.checkBox1.AutoSize = true;
@@ -58,6 +68,7 @@
             this.checkBox1.TabIndex = 0;
             this.checkBox1.Text = "Always Center";
             this.checkBox1.UseVisualStyleBackColor = true;
+            this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
             // 
             // panel2
             // 
@@ -67,15 +78,6 @@
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(187, 715);
             this.panel2.TabIndex = 1;
-            // 
-            // canvas
-            // 
-            this.canvas.BackColor = System.Drawing.Color.White;
-            this.canvas.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.canvas.Location = new System.Drawing.Point(187, 0);
-            this.canvas.Name = "canvas";
-            this.canvas.Size = new System.Drawing.Size(674, 715);
-            this.canvas.TabIndex = 2;
             // 
             // listView1
             // 
@@ -87,15 +89,15 @@
             this.listView1.TabIndex = 0;
             this.listView1.UseCompatibleStateImageBehavior = false;
             // 
-            // button1
+            // canvas
             // 
-            this.button1.Location = new System.Drawing.Point(71, 66);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 1;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.canvas.BackColor = System.Drawing.Color.White;
+            this.canvas.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.canvas.Location = new System.Drawing.Point(187, 0);
+            this.canvas.Name = "canvas";
+            this.canvas.Size = new System.Drawing.Size(674, 715);
+            this.canvas.TabIndex = 2;
+            this.canvas.SizeChanged += new System.EventHandler(this.canvas_SizeChanged);
             // 
             // TextWatermark
             // 

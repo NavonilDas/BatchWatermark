@@ -33,15 +33,15 @@ namespace BatchWatermark
              t = new TextCanavsControl();
             t.Width = 300;
             t.Height = 300;
-            t.BackgroundImage  = Image.FromFile("E:\\Thecertificate.jpeg");
+            //t.BackgroundImage  = Image.FromFile("E:\\Thecertificate.jpeg");
+            t.SetImage("E:\\Thecertificate.jpeg",canvas);
             t.OnTextFocused += new EventHandler(textFocused);
-            t.Location = new Point(100, 100);
             canvas.Controls.Add(t);
         }
 
         private void textFocused(object sender, EventArgs e)
         {
-            MessageBox.Show("diasjkhdj");
+            //MessageBox.Show("diasjkhdj");
         }
 
         private void panel1_Paint(object sender, PaintEventArgs e)
@@ -53,7 +53,19 @@ namespace BatchWatermark
         {
             //canvas.BackgroundImage = Image.FromFile("E:\\Thecertificate.jpeg");
             //canvas.BackColor = Color.Red;
-            t.Text = "hi there";
+            //t.Text = "hi there";
+            t.BackColor = Color.Red;
+        }
+
+        private void canvas_SizeChanged(object sender, EventArgs e)
+        {
+            if(t != null)
+                t.UpdateImage(canvas);
+        }
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            t.Centered = checkBox1.Checked;
         }
     }
 }
