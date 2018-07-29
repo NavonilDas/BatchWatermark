@@ -52,7 +52,7 @@
     <Compile Include="Forms\About.Designer.cs">
       <DependentUpon>About.cs</DependentUpon>
     </Compile>
-    <Compile Include="Compressor.cs" />
+    <Compile Include="Utils\Compressor.cs" />
     <Compile Include="Forms\ImageWatermark.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -84,6 +84,10 @@
     </Compile>
     <Compile Include="Forms\TextWatermark.Designer.cs">
       <DependentUpon>TextWatermark.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Utils\TextCanavsControl.cs" />
+    <Compile Include="Utils\TextControl.cs">
+      <SubType>Component</SubType>
     </Compile>
     <EmbeddedResource Include="Forms\About.resx">
       <DependentUpon>About.cs</DependentUpon>
