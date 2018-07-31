@@ -33,6 +33,7 @@ namespace BatchWatermark.Utils
         private Rectangle trans;
         private string file = "";
         private SolidBrush fontBrush;
+        private Panel parent;
         //        private bool isBackTransparent = true;
 
         /// <summary>
@@ -122,7 +123,19 @@ namespace BatchWatermark.Utils
                 Refresh();
             }
         }
-
+        /// <summary>
+        /// Set The Rotation Of the Text
+        /// </summary>
+        public int Rotation
+        {
+            get {
+                return rotate;
+            }
+            set
+            {
+                rotate = value;
+            }
+        }
 
         /// <summary>
         /// Constructor
@@ -130,7 +143,20 @@ namespace BatchWatermark.Utils
         public TextCanavsControl()
         {
             trans = new Rectangle(10,10, 1, 1);
-            CalcSize();
+            setCenter();
+            fontBrush = new SolidBrush(fontColor);
+            SetStyle(ControlStyles.UserPaint | ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint, true);
+        }
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public TextCanavsControl(Panel parent)
+        {
+            this.parent = parent;
+            this.Width = parent.Width;
+            this.Height = parent.Height;
+            trans = new Rectangle(10, 10, 1, 1);
+            setCenter();
             fontBrush = new SolidBrush(fontColor);
             SetStyle(ControlStyles.UserPaint | ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint, true);
         }
@@ -146,7 +172,7 @@ namespace BatchWatermark.Utils
         /// <summary>
         /// Function to set the Background Image from file
         /// </summary>
-        public void SetImage(string file,Panel parent)
+        public void SetImage(string file, Panel parent)
         {
             this.file = file;
             Bitmap bmp;
@@ -159,15 +185,62 @@ namespace BatchWatermark.Utils
 
                 bmp = new Bitmap(this.Width, (this.Width * x.Height) / x.Width);
                 this.Height = (this.Width * x.Height) / x.Width;
-                using (Graphics g = Graphics.FromImage(bmp)) { 
-                    g.DrawImage(x,new Rectangle(0,0,bmp.Width,bmp.Height), 0, 0, x.Width, x.Height, GraphicsUnit.Pixel);
+                using (Graphics g = Graphics.FromImage(bmp))
+                {
+                    g.DrawImage(x, new Rectangle(0, 0, bmp.Width, bmp.Height), 0, 0, x.Width, x.Height, GraphicsUnit.Pixel);
                 }
             }
-            this.Location = new Point((parent.Width - this.Width)/2, (parent.Height - this.Height)/2);
+            this.Location = new Point((parent.Width - this.Width) / 2, (parent.Height - this.Height) / 2);
+            this.BackgroundImage = bmp;
+            Refresh();
+        }
+        /// <summary>
+        /// Function to set the Background Image from file
+        /// </summary>
+        public void SetImage(string file)
+        {
+            this.file = file;
+            Bitmap bmp;
+            using (Image x = Image.FromFile(file))
+            {
+                if (parent.Width < x.Width)
+                    this.Width = parent.Width;
+                else
+                    this.Width = x.Width;
+
+                bmp = new Bitmap(this.Width, (this.Width * x.Height) / x.Width);
+                this.Height = (this.Width * x.Height) / x.Width;
+                using (Graphics g = Graphics.FromImage(bmp))
+                {
+                    g.DrawImage(x, new Rectangle(0, 0, bmp.Width, bmp.Height), 0, 0, x.Width, x.Height, GraphicsUnit.Pixel);
+                }
+            }
+            this.Location = new Point((parent.Width - this.Width) / 2, (parent.Height - this.Height) / 2);
             this.BackgroundImage = bmp;
             Refresh();
         }
         public void UpdateImage(Panel parent)
+        {
+            Bitmap bmp;
+            using (Image x = Image.FromFile(file))
+            {
+                if (parent.Width < x.Width)
+                    this.Width = parent.Width;
+                else
+                    this.Width = x.Width;
+
+                bmp = new Bitmap(this.Width, (this.Width * x.Height) / x.Width);
+                this.Height = (this.Width * x.Height) / x.Width;
+                using (Graphics g = Graphics.FromImage(bmp))
+                {
+                    g.DrawImage(x, new Rectangle(0, 0, bmp.Width, bmp.Height), 0, 0, x.Width, x.Height, GraphicsUnit.Pixel);
+                }
+            }
+            this.Location = new Point((parent.Width - this.Width) / 2, (parent.Height - this.Height) / 2);
+            this.BackgroundImage = bmp;
+            Refresh();
+        }
+        public void UpdateImage()
         {
             Bitmap bmp;
             using (Image x = Image.FromFile(file))

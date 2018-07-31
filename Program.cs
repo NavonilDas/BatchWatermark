@@ -16,7 +16,8 @@ namespace BatchWatermark
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             //Application.Run(new Splash());
-            Application.Run(new TextWatermark());
+            //Application.Run(new TextWatermark());
+            Application.Run(new MainForm());
         }
 
     }

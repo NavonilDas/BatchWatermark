@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using BatchWatermark.Utils;
+using System.IO;
 
 namespace BatchWatermark
 {
@@ -30,6 +31,8 @@ namespace BatchWatermark
         TextCanavsControl t;
         private void TextWatermark_Load(object sender, EventArgs e)
         {
+            listView1.MultiSelect = false;
+
              t = new TextCanavsControl();
             t.Width = 300;
             t.Height = 300;
@@ -45,6 +48,17 @@ namespace BatchWatermark
                 transparentLabel.Text = "";
             }
             demoLabel.Font = t.Font;
+            numericUpDown1.Value = t.Rotation;
+
+
+
+            /// Add File Names to The List View
+            FileInfo fi;
+            if(fileNames != null)
+            foreach (string _file in fileNames) {
+                    fi = new FileInfo(_file);
+                    listView1.Items.Add(fi.Name.Replace(fi.Extension,""));
+            }
             canvas.Controls.Add(t);
         }
         Font f;
@@ -116,6 +130,23 @@ namespace BatchWatermark
                 demoLabel.Font = fontDialog1.Font;
                 t.Font = fontDialog1.Font;
             }
+        }
+
+        private void listView1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (t != null && listView1.SelectedIndices.Count > 0)
+                t.SetImage(fileNames[listView1.SelectedIndices[0]],canvas);
+        }
+
+        private void numericUpDown1_ValueChanged(object sender, EventArgs e)
+        {
+            if (t != null)
+                t.Rotation = (int)numericUpDown1.Value;
+        }
+
+        private void backClrBox_Paint(object sender, PaintEventArgs e)
+        {
+            e.Graphics.DrawRectangle(Pens.Black, new Rectangle(0,0,e.ClipRectangle.Width-1,e.ClipRectangle.Height-1));
         }
     }
 }
