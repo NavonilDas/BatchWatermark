@@ -21,7 +21,7 @@ namespace BatchWatermark.Utils
     {
         // Private members
         private string text = "Batch Watermark";
-        private Color fontColor = Color.Black;
+        private Color fontColor = Color.Violet;
         private Color backColor = Color.Transparent;
         private int rotate = 0;
         private Font textFont = new Font("Arial", 16, GraphicsUnit.Point);
@@ -31,8 +31,9 @@ namespace BatchWatermark.Utils
         private int curH;
         private bool isCenter = false;
         private Rectangle trans;
+        private string file = "";
+        private SolidBrush fontBrush;
         //        private bool isBackTransparent = true;
-
 
         /// <summary>
         /// Event trrigers when the Text item gets focused
@@ -89,6 +90,23 @@ namespace BatchWatermark.Utils
             }
         }
         /// <summary>
+        /// Sets the Text color of the watermark
+        /// </summary>
+        public override Color ForeColor
+        {
+            get
+            {
+                return fontColor;
+            }
+
+            set
+            {
+                fontColor = value;
+                fontBrush = new SolidBrush(fontColor);
+                Refresh();
+            }
+        }
+        /// <summary>
         /// Set the Watermark at the Center
         /// </summary>
         public bool Centered
@@ -113,6 +131,7 @@ namespace BatchWatermark.Utils
         {
             trans = new Rectangle(10,10, 1, 1);
             CalcSize();
+            fontBrush = new SolidBrush(fontColor);
             SetStyle(ControlStyles.UserPaint | ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint, true);
         }
         /// <summary>
@@ -129,14 +148,44 @@ namespace BatchWatermark.Utils
         /// </summary>
         public void SetImage(string file,Panel parent)
         {
-            this.Width = parent.Width;
-            this.Location = new Point(0,0);
-            this.BackgroundImage = Image.FromFile(file);
+            this.file = file;
+            Bitmap bmp;
+            using (Image x = Image.FromFile(file))
+            {
+                if (parent.Width < x.Width)
+                    this.Width = parent.Width;
+                else
+                    this.Width = x.Width;
+
+                bmp = new Bitmap(this.Width, (this.Width * x.Height) / x.Width);
+                this.Height = (this.Width * x.Height) / x.Width;
+                using (Graphics g = Graphics.FromImage(bmp)) { 
+                    g.DrawImage(x,new Rectangle(0,0,bmp.Width,bmp.Height), 0, 0, x.Width, x.Height, GraphicsUnit.Pixel);
+                }
+            }
+            this.Location = new Point((parent.Width - this.Width)/2, (parent.Height - this.Height)/2);
+            this.BackgroundImage = bmp;
             Refresh();
         }
         public void UpdateImage(Panel parent)
         {
-            this.Width = parent.Width;
+            Bitmap bmp;
+            using (Image x = Image.FromFile(file))
+            {
+                if (parent.Width < x.Width)
+                    this.Width = parent.Width;
+                else
+                    this.Width = x.Width;
+
+                bmp = new Bitmap(this.Width, (this.Width * x.Height) / x.Width);
+                this.Height = (this.Width * x.Height) / x.Width;
+                using (Graphics g = Graphics.FromImage(bmp))
+                {
+                    g.DrawImage(x, new Rectangle(0, 0, bmp.Width, bmp.Height), 0, 0, x.Width, x.Height, GraphicsUnit.Pixel);
+                }
+            }
+            this.Location = new Point((parent.Width - this.Width) / 2, (parent.Height - this.Height) / 2);
+            this.BackgroundImage = bmp;
             Refresh();
         }
         /// <summary>
@@ -210,7 +259,7 @@ namespace BatchWatermark.Utils
             if (backColor != Color.Transparent)
                 g.FillRectangle(new SolidBrush(backColor), trans);
 
-            g.DrawString(this.text, this.textFont, Brushes.Violet, new Point(trans.X + 1 ,trans.Y + 1));
+            g.DrawString(this.text, this.textFont, fontBrush, new Point(trans.X + 1 ,trans.Y + 1));
 
             if (rotate > 0)
             {

@@ -33,12 +33,21 @@ namespace BatchWatermark
              t = new TextCanavsControl();
             t.Width = 300;
             t.Height = 300;
-            //t.BackgroundImage  = Image.FromFile("E:\\Thecertificate.jpeg");
             t.SetImage("E:\\Thecertificate.jpeg",canvas);
             t.OnTextFocused += new EventHandler(textFocused);
+            f = t.Font;
+            textClrBox.BackColor = t.ForeColor;
+            if (t.BackColor == Color.Transparent)
+                transparentLabel.Text = "Transparent";
+            else
+            {
+                backClrBox.BackColor = t.BackColor;
+                transparentLabel.Text = "";
+            }
+            demoLabel.Font = t.Font;
             canvas.Controls.Add(t);
         }
-
+        Font f;
         private void textFocused(object sender, EventArgs e)
         {
             //MessageBox.Show("diasjkhdj");
@@ -51,10 +60,12 @@ namespace BatchWatermark
 
         private void button1_Click(object sender, EventArgs e)
         {
-            //canvas.BackgroundImage = Image.FromFile("E:\\Thecertificate.jpeg");
-            //canvas.BackColor = Color.Red;
-            //t.Text = "hi there";
-            t.BackColor = Color.Red;
+            DialogResult dr = colorDialog1.ShowDialog();
+            if(dr == DialogResult.OK)
+            {
+                t.ForeColor = colorDialog1.Color;
+                textClrBox.BackColor = colorDialog1.Color;
+            }
         }
 
         private void canvas_SizeChanged(object sender, EventArgs e)
@@ -66,6 +77,45 @@ namespace BatchWatermark
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
             t.Centered = checkBox1.Checked;
+        }
+
+        private void trackBar1_Scroll(object sender, EventArgs e)
+        {
+            f = new Font(f.FontFamily,trackBar1.Value,f.Style);
+            t.Font = f;
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+            t.Text = textBox1.Text;
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            DialogResult dr = colorDialog1.ShowDialog();
+            if (dr == DialogResult.OK)
+            {
+                t.BackColor = colorDialog1.Color;
+                backClrBox.BackColor = colorDialog1.Color;
+                transparentLabel.Text = "";
+            }
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            t.BackColor = Color.Transparent;
+            transparentLabel.Text = "Transparent";
+            backClrBox.BackColor = Color.Transparent;
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            DialogResult dr = fontDialog1.ShowDialog();
+            if(dr == DialogResult.OK)
+            {
+                demoLabel.Font = fontDialog1.Font;
+                t.Font = fontDialog1.Font;
+            }
         }
     }
 }
